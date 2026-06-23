@@ -2,10 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mi Portafolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
   <style>
     :root {
       --bg-dark: #1e1e24; /* Gris oscuro, no negro */
@@ -25,57 +30,141 @@
       font-weight: 400; /* Regular */
       background-color: var(--bg-dark);
       color: var(--text-main); 
-      padding: 40px 20px; 
       margin: 0;
       line-height: 1.5; /* Interlineado generoso para textos largos */
-      
-      /* Efecto sutil nocturno estrellado */
-      background-image: 
-        radial-gradient(rgba(239, 239, 239, 0.15) 1px, transparent 1px),
-        radial-gradient(rgba(239, 239, 239, 0.1) 1px, transparent 1px);
-      background-size: 50px 50px, 90px 90px;
-      background-position: 0 0, 25px 25px;
+    }
+
+    canvas#starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
     }
 
     h1, h2, h3, h4, h5, h6 {
-      font-family: 'Space Mono', monospace;
+      font-family: 'Oswald', sans-serif;
       text-transform: uppercase;
       line-height: 1; /* Interlineado en bloque */
-      margin: 0 0 16px;
       font-weight: 700;
     }
 
-    h1 {
+    /* Custom Hero styling mixed with Bootstrap */
+    .hero {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background-size: 100% auto; 
+      background-position: center bottom; 
+      background-repeat: no-repeat;
+      position: relative;
+    }
+    
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0) 100%);
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        background-size: cover; 
+        background-position: left center;
+      }
+      .hero::before {
+        background: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0) 70%);
+      }
+      .hero-content {
+        max-width: 50%;
+      }
+    }
+
+    .hero-title-text {
       font-size: 3rem;
-      text-align: center;
-      margin-bottom: 60px;
-      color: var(--accent-orange);
+      margin-bottom: 16px;
+      color: var(--text-main);
       text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
     }
 
-    .grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-      gap: 40px; 
-      max-width: 1200px;
-      margin: 0 auto;
+    @media (min-width: 768px) {
+      .hero-title-text { font-size: 4rem; }
     }
 
-    .card { 
+    .hero-greeting-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: var(--accent-orange);
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .hero-desc-text {
+      font-size: 1.125rem;
+      color: #C0C0C0;
+      line-height: 1.7;
+    }
+
+    /* Botones personalizados que complementan Bootstrap */
+    .btn-custom {
+      display: inline-block;
+      background: var(--accent-orange);
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border-radius: 8px;
+      transition: background 0.3s ease, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+    }
+
+    .btn-custom:hover {
+      background: var(--accent-red);
+      color: #fff;
+      transform: translateY(-4px);
+    }
+
+    .btn-whatsapp {
+      background: var(--accent-green);
+      color: #1e1e24;
+    }
+
+    .btn-whatsapp:hover {
+      background: #1da34f;
+      color: #1e1e24;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      color: var(--text-main);
+    }
+
+    /* Glassmorphism card */
+    .glass-card { 
       background: rgba(30, 30, 36, 0.7); 
       border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 12px; 
       overflow: hidden;
       backdrop-filter: blur(8px);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease;
+      height: 100%;
     }
 
-    .card:hover {
+    .glass-card:hover {
       transform: translateY(-8px);
       box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
       border-color: rgba(255, 79, 0, 0.3);
     }
 
+    /* Galería Bento */
     .bento-gallery {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -101,207 +190,41 @@
     .bento-gallery img:hover {
       filter: brightness(1.2);
     }
-
-    .card .info { 
-      padding: 24px; 
-    }
-
-    .card h3 { 
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-      color: var(--text-main);
-    }
-
-    .card p { 
-      margin: 0; 
-      color: #A0A0A0; 
-      font-size: 0.95rem;
-      font-weight: 600; /* SemiBold */
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Texto centrado horizontalmente en mobile */
-      justify-content: flex-start; /* Texto arriba en mobile */
-      text-align: center; /* Centrar el texto en sí mismo en mobile */
-      width: 100%;
-      margin: 0 0 80px 0;
-      padding: 40px 20px; 
-      min-height: 85vh; 
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      background-size: auto 150%; 
-      background-position: center bottom; 
-      position: relative;
-    }
-    
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to bottom, rgba(30,30,36,1) 0%, rgba(30,30,36,0.8) 50%, rgba(30,30,36,0) 100%); /* Gradiente de arriba abajo en mobile */
-      z-index: 1;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 100%; /* Todo el ancho en mobile */
-      width: 100%;
-    }
-
-    @media (min-width: 768px) {
-      .hero {
-        align-items: flex-end; /* Mueve el bloque de texto a la derecha en desktop */
-        justify-content: center; /* Centrado vertical */
-        text-align: left; /* Restaura el texto a la izquierda en desktop */
-        padding: 100px 40px;
-        min-height: 65vh;
-        background-size: cover; 
-        background-position: left center; /* Sujeto a la izquierda en desktop */
-      }
-      .hero::before {
-        background: linear-gradient(to left, rgba(30,30,36,1) 0%, rgba(30,30,36,0.9) 35%, rgba(30,30,36,0) 70%); /* Gradiente lateral en desktop */
-      }
-      .hero-content {
-        max-width: 50%; /* Arranca en la mitad y va a la derecha */
-      }
-    }
-
-    .hero-content h1 {
-      font-size: 3rem;
-      text-align: inherit;
-      margin-bottom: 16px;
-      text-shadow: none;
-      color: var(--text-main);
-    }
-
-    @media (min-width: 768px) {
-      .hero-content h1 {
-        font-size: 4rem;
-      }
-    }
-
-    .hero-content h2 {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.1rem;
-      color: var(--accent-orange);
-      font-weight: 800; /* ExtraBold */
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-
-    .hero-content p {
-      font-size: 1.125rem;
-      color: #C0C0C0;
-      margin-bottom: 40px;
-      line-height: 1.7;
-    }
-
-    .hero-btn {
-      display: inline-block;
-      background: var(--accent-orange);
-      color: #fff;
-      font-family: 'Space Mono', monospace;
-      font-weight: 700;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 16px 32px;
-      border-radius: 8px;
-      transition: background 0.3s ease, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .hero-btn:hover {
-      background: var(--accent-red);
-      transform: translateY(-4px);
-    }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center; /* Centrado en mobile */
-    }
-    
-    @media (min-width: 768px) {
-      .hero-actions {
-        justify-content: flex-start; /* A la izquierda en desktop */
-      }
-    }
-
-    .hero-btn-whatsapp {
-      background: var(--accent-green);
-      color: #1e1e24;
-    }
-
-    .hero-btn-whatsapp:hover {
-      background: #1da34f;
-      color: #1e1e24;
-    }
-    
-    .section-title {
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 48px;
-      color: var(--text-main);
-    }
-    
     .bento-gallery img:not(:first-child):last-child:nth-child(even) {
       grid-column: 1 / -1;
       aspect-ratio: 2 / 1;
     }
 
-    .grid-pisos {
-      display: flex;
-      flex-direction: column;
-      gap: 80px;
-      max-width: 1200px;
-      margin: 0 auto;
+    .card-title-custom {
+      font-size: 1.5rem;
+      color: var(--text-main);
     }
 
-    .card-piso {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .card-piso .info-piso h3 {
+    .card-piso-title {
       font-size: 2.5rem;
-      margin: 0;
       color: var(--accent-orange);
-      text-transform: uppercase;
-      font-family: 'Space Mono', monospace;
-      text-align: left;
-    }
-
-    .card-piso.reverse .info-piso h3 {
-      text-align: right;
-    }
-
-    .card-piso .bento-gallery {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
-      border-bottom: none;
     }
   </style>
 </head>
 <body>
-  <header class="hero" id="hero-header" style="display: none;">
-    <div class="hero-content">
-      <h2 id="hero-greeting"></h2>
-      <h1 id="hero-title"></h1>
-      <p id="hero-bio"></p>
-      <div class="hero-actions">
-        <a id="btn-main-cta" href="#" class="hero-btn">Hablemos de tu proyecto</a>
-        <a id="btn-email" href="#" class="hero-btn" style="display: none;">Contactar por Email</a>
-        <a id="btn-whatsapp" href="https://wa.me/5492477464726" target="_blank" rel="noopener noreferrer" class="hero-btn hero-btn-whatsapp" style="display: none;">WhatsApp</a>
+  <canvas id="starfield"></canvas>
+  <header class="hero min-vh-100 d-flex flex-column justify-content-start justify-content-md-center align-items-start align-items-md-end text-start pt-4 pb-0 py-md-5 px-3 px-md-5" id="hero-header" style="display: none !important;">
+    <div class="hero-content w-100">
+      <h3 id="hero-greeting" class="hero-greeting-text text-uppercase"></h3>
+      <h1 id="hero-title" class="hero-title-text text-uppercase text-start" style="color: var(--accent-orange);"></h1>
+      <p id="hero-bio" class="hero-desc-text mb-4 mb-md-5"></p>
+      <div class="d-flex flex-wrap gap-3 justify-content-start">
+        <a id="btn-main-cta" href="#" class="btn btn-custom text-decoration-none">Hablemos de tu proyecto</a>
+        <a id="btn-email" href="#" class="btn btn-custom text-decoration-none" style="display: none;">Contactar por Email</a>
+        <a id="btn-whatsapp" href="https://wa.me/5492477464726" target="_blank" rel="noopener noreferrer" class="btn btn-custom btn-whatsapp text-decoration-none" style="display: none;">WhatsApp</a>
       </div>
     </div>
   </header>
 
-  <div id="proyectos-container"></div>
+  <main class="container py-5 mt-5" id="proyectos-container" style="position: relative; z-index: 2;"></main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     const projectId = "j67rip91";
@@ -319,11 +242,11 @@
         const perfil = data.result.perfil;
         if (perfil) {
           const heroHeader = document.getElementById('hero-header');
-          heroHeader.style.display = 'flex';
+          heroHeader.style.setProperty('display', 'flex', 'important');
           if (perfil.fotoUrl) {
             heroHeader.style.backgroundImage = `url(${perfil.fotoUrl})`;
           }
-          if (perfil.nombre) document.getElementById('hero-greeting').textContent = `Hola, soy ${perfil.nombre}`;
+          if (perfil.nombre) document.getElementById('hero-greeting').textContent = perfil.nombre;
           if (perfil.profesion) document.getElementById('hero-title').textContent = perfil.profesion;
           if (perfil.bio) document.getElementById('hero-bio').textContent = perfil.bio;
           const mainCta = document.getElementById('btn-main-cta');
@@ -333,9 +256,9 @@
           mainCta.addEventListener('click', (e) => {
             e.preventDefault();
             mainCta.style.display = 'none';
-            btnWhatsapp.style.display = 'inline-block';
+            btnWhatsapp.style.setProperty('display', 'inline-block', 'important');
             if (perfil.email) {
-              btnEmail.style.display = 'inline-block';
+              btnEmail.style.setProperty('display', 'inline-block', 'important');
             }
           });
 
@@ -371,66 +294,123 @@
 
         for (const cat in groups) {
           const section = document.createElement('section');
-          section.style.marginBottom = '80px';
+          section.className = 'mb-5 pb-5';
           
           const sectionTitle = document.createElement('h2');
-          sectionTitle.className = 'section-title';
+          sectionTitle.className = 'section-title text-center mb-5';
           sectionTitle.textContent = catMap[cat] || cat.toUpperCase();
           section.appendChild(sectionTitle);
 
           const grid = document.createElement('div');
           if (cat === 'fotografia') {
-            grid.className = 'grid-pisos';
+            grid.className = 'd-flex flex-column gap-5';
           } else {
-            grid.className = 'grid';
+            grid.className = 'row g-4';
           }
           
           groups[cat].forEach((proyecto, index) => {
-            const card = document.createElement('div');
-            card.className = cat === 'fotografia' ? 'card-piso' : 'card';
+            const cardWrapper = document.createElement('div');
             
-            if (cat === 'fotografia' && index % 2 !== 0) {
-              card.classList.add('reverse');
+            if (cat !== 'fotografia') {
+              cardWrapper.className = 'col-12 col-md-6 col-lg-4';
             }
+
+            const card = document.createElement('div');
+            
+            const isReverse = cat === 'fotografia' && index % 2 !== 0;
 
             const imagenesArr = proyecto.imagenes || [];
             const imagenesHtml = imagenesArr.length > 0 ? 
-              `<div class="bento-gallery">
-                ${imagenesArr.map(url => `<img src="${url}" alt="${proyecto.titulo}">`).join('')}
+              `<div class="bento-gallery ${cat === 'fotografia' ? 'rounded-3 shadow-lg border-0' : ''}">
+                ${imagenesArr.map(url => `<img src="${url}" alt="${proyecto.titulo}" class="img-fluid">`).join('')}
                </div>` : '';
 
             let videoHtml = '';
             if (proyecto.videoVimeo) {
               const vimeoMatch = proyecto.videoVimeo.match(/(\d+)/);
               if (vimeoMatch) {
-                videoHtml = `<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/${vimeoMatch[0]}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>`;
+                videoHtml = `<div class="ratio ratio-16x9"><iframe src="https://player.vimeo.com/video/${vimeoMatch[0]}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>`;
               }
             }
 
             if (cat === 'fotografia') {
+              card.className = 'd-flex flex-column gap-4';
               card.innerHTML = `
-                <div class="info-piso">
-                  <h3>${proyecto.titulo}</h3>
+                <div class="${isReverse ? 'text-end' : 'text-start'}">
+                  <h3 class="card-piso-title m-0 text-uppercase">${proyecto.titulo}</h3>
                 </div>
                 ${videoHtml}
                 ${imagenesHtml}
               `;
+              cardWrapper.appendChild(card);
             } else {
+              card.className = 'glass-card d-flex flex-column';
               card.innerHTML = `
                 ${videoHtml}
                 ${imagenesHtml}
-                <div class="info">
-                  <h3>${proyecto.titulo}</h3>
+                <div class="p-4 mt-auto">
+                  <h3 class="card-title-custom m-0">${proyecto.titulo}</h3>
                 </div>
               `;
+              cardWrapper.appendChild(card);
             }
-            grid.appendChild(card);
+            grid.appendChild(cardWrapper);
           });
           section.appendChild(grid);
           containerMaster.appendChild(section);
         }
       })
       .catch(err => console.error('Error trayendo datos:', err));
+  </script>
+
+  <script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const LAYERS = [
+      { count: 60, speed: 0.06, size: 0.7,  alpha: 0.25 },
+      { count: 35, speed: 0.14, size: 1.1,  alpha: 0.45 },
+      { count: 15, speed: 0.22, size: 1.6,  alpha: 0.65 },
+    ];
+
+    const stars = [];
+    LAYERS.forEach(l => {
+      for (let i = 0; i < l.count; i++) {
+        stars.push({
+          x:     Math.random() * window.innerWidth,
+          y:     Math.random() * window.innerHeight,
+          size:  l.size + Math.random() * 0.5,
+          alpha: l.alpha * (0.7 + Math.random() * 0.3),
+          dx:    (Math.random() - 0.5) * l.speed,
+          dy:    (Math.random() - 0.5) * l.speed * 0.4,
+        });
+      }
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220, 220, 230, ${s.alpha})`;
+        ctx.fill();
+        s.x += s.dx;
+        s.y += s.dy;
+        if (s.x < -2) s.x = canvas.width + 2;
+        if (s.x > canvas.width + 2) s.x = -2;
+        if (s.y < -2) s.y = canvas.height + 2;
+        if (s.y > canvas.height + 2) s.y = -2;
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
   </script>
 </body>
 </html>
