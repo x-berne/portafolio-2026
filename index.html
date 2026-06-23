@@ -6,7 +6,7 @@
   <title>Mi Portafolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
   
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
   <style>
     :root {
       --bg-dark: #1e1e24; /* Gris oscuro, no negro */
-      --text-main: #EFEFEF; /* Casi blanco */
+      --text-main: #FAFAFA; /* Blanco casi puro */
       
       /* Color de acento principal y derivados con similar luminosidad */
       --accent-orange: #FF4F00;
@@ -32,6 +32,7 @@
       color: var(--text-main); 
       margin: 0;
       line-height: 1.5; /* Interlineado generoso para textos largos */
+      overflow-x: hidden; /* Evita el scroll horizontal de la página */
     }
 
     canvas#starfield {
@@ -98,17 +99,17 @@
     }
 
     .hero-greeting-text {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 1.1rem;
       color: var(--accent-orange);
-      font-weight: 700;
+      font-weight: 400;
       letter-spacing: 2px;
       margin-bottom: 20px;
     }
 
     .hero-desc-text {
       font-size: 1.125rem;
-      color: #C0C0C0;
+      color: var(--text-main);
       line-height: 1.7;
     }
 
@@ -143,7 +144,9 @@
     }
     
     .section-title {
-      font-size: 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 1.75rem;
+      font-weight: 400;
       color: var(--text-main);
     }
 
@@ -164,35 +167,119 @@
       border-color: rgba(255, 79, 0, 0.3);
     }
 
-    /* Galería Bento */
-    .bento-gallery {
+    /* Galería Simple */
+    .simple-gallery {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      border-bottom: 2px solid var(--accent-orange);
-      background-color: rgba(255, 255, 255, 0.05);
+      gap: 16px;
     }
-    .bento-gallery img { 
+    .simple-gallery img { 
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
       display: block;
       transition: filter 0.3s ease;
     }
-    .bento-gallery img:first-child {
+    .simple-gallery img.is-portrait {
+      grid-column: span 1;
+    }
+    .simple-gallery img.is-landscape {
       grid-column: 1 / -1;
-      height: auto;
-      max-height: 500px;
     }
-    .bento-gallery img:not(:first-child) {
-      aspect-ratio: 1 / 1;
-    }
-    .bento-gallery img:hover {
+    .simple-gallery img:hover {
       filter: brightness(1.2);
     }
-    .bento-gallery img:not(:first-child):last-child:nth-child(even) {
-      grid-column: 1 / -1;
-      aspect-ratio: 2 / 1;
+
+    /* Carrusel de Proyectos (Center Mode con Previews) */
+    .portfolio-carousel {
+      background-color: transparent;
+      overflow: hidden; /* Contiene las vistas previas dentro del ancho del proyecto */
+      position: relative;
+    }
+    .portfolio-carousel .carousel-inner {
+      overflow: visible !important;
+      width: 80%;
+      margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .portfolio-carousel .carousel-inner {
+        width: 60%;
+      }
+    }
+    .portfolio-carousel .carousel-item {
+      display: none !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 380px; /* Alto en mobile */
+      opacity: 0;
+      transform: scale(0.7) translateX(0);
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease, filter 0.6s ease !important;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @media (min-width: 768px) {
+      .portfolio-carousel .carousel-item {
+        height: 550px; /* Alto en desktop */
+      }
+    }
+    .portfolio-carousel .carousel-item img {
+      height: 100%;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      margin: 0 auto;
+      display: block;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Mostrar solo los tres elementos activos y colindantes */
+    .portfolio-carousel .carousel-item.active,
+    .portfolio-carousel .carousel-item.prev-item,
+    .portfolio-carousel .carousel-item.next-item {
+      display: block !important;
+      opacity: 0.4;
+      filter: brightness(0.3);
+      z-index: 1;
+    }
+    
+    .portfolio-carousel .carousel-item.active {
+      opacity: 1 !important;
+      filter: brightness(1) !important;
+      transform: scale(1) translateX(0) !important;
+      z-index: 3 !important;
+      position: relative; /* Define la altura */
+      pointer-events: auto;
+    }
+    
+    .portfolio-carousel .carousel-item.prev-item {
+      transform: scale(0.8) translateX(-65%) !important;
+      z-index: 2 !important;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .portfolio-carousel .carousel-item.next-item {
+      transform: scale(0.8) translateX(65%) !important;
+      z-index: 2 !important;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    @media (min-width: 768px) {
+      .portfolio-carousel .carousel-item.prev-item {
+        transform: scale(0.8) translateX(-60%) !important;
+      }
+      .portfolio-carousel .carousel-item.next-item {
+        transform: scale(0.8) translateX(60%) !important;
+      }
+    }
+
+    /* Ajustar flechas de control para que no queden tapadas */
+    .portfolio-carousel .carousel-control-prev,
+    .portfolio-carousel .carousel-control-next {
+      width: 10%;
+      z-index: 4;
     }
 
     .card-title-custom {
@@ -203,6 +290,65 @@
     .card-piso-title {
       font-size: 2.5rem;
       color: var(--accent-orange);
+    }
+
+    /* Lightbox Premium (Pantalla Completa) */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(15px);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .lightbox-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .lightbox-image {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .lightbox-overlay.active .lightbox-image {
+      transform: scale(1);
+    }
+    .lightbox-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 2.5rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      line-height: 1;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .lightbox-close-btn:hover {
+      opacity: 1;
+      transform: scale(1.1) rotate(90deg);
+      background-color: rgba(255, 255, 255, 0.1);
     }
   </style>
 </head>
@@ -227,11 +373,30 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
+    function updateCarouselPreviews(carouselEl, activeTarget) {
+      const items = carouselEl.querySelectorAll('.carousel-item');
+      const activeIndex = Array.from(items).indexOf(activeTarget);
+      
+      items.forEach((item, idx) => {
+        item.classList.remove('prev-item', 'next-item');
+        if (items.length > 1) {
+          const prevIdx = (activeIndex - 1 + items.length) % items.length;
+          const nextIdx = (activeIndex + 1) % items.length;
+          
+          if (idx === prevIdx) {
+            item.classList.add('prev-item');
+          } else if (idx === nextIdx) {
+            item.classList.add('next-item');
+          }
+        }
+      });
+    }
+
     const projectId = "j67rip91";
     const dataset = "production";
     const query = encodeURIComponent(`{
       "perfil": *[_type == "perfil"][0]{nombre, profesion, "fotoUrl": foto.asset->url, bio, email},
-      "proyectos": *[_type == "proyecto"]{titulo, categoria, "imagenes": imagenes[].asset->url, videoVimeo}
+      "proyectos": *[_type == "proyecto"]{titulo, categoria, tipoGaleria, "imagenes": imagenes[].asset->url, videoVimeo}
     }`);
     const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
 
@@ -296,69 +461,198 @@
           const section = document.createElement('section');
           section.className = 'mb-5 pb-5';
           
-          const sectionTitle = document.createElement('h2');
-          sectionTitle.className = 'section-title text-center mb-5';
+          const headerContainer = document.createElement('div');
+          headerContainer.className = 'd-flex align-items-center gap-3 mb-5';
+          
+          const sectionTitle = document.createElement('h3');
+          sectionTitle.className = 'section-title m-0';
           sectionTitle.textContent = catMap[cat] || cat.toUpperCase();
-          section.appendChild(sectionTitle);
+          
+          const divider = document.createElement('hr');
+          divider.className = 'flex-grow-1 border-secondary opacity-25 m-0';
+          
+          headerContainer.appendChild(sectionTitle);
+          headerContainer.appendChild(divider);
+          section.appendChild(headerContainer);
 
           const grid = document.createElement('div');
-          if (cat === 'fotografia') {
-            grid.className = 'd-flex flex-column gap-5';
-          } else {
-            grid.className = 'row g-4';
-          }
+          grid.className = 'd-flex flex-column gap-5';
           
           groups[cat].forEach((proyecto, index) => {
-            const cardWrapper = document.createElement('div');
-            
-            if (cat !== 'fotografia') {
-              cardWrapper.className = 'col-12 col-md-6 col-lg-4';
-            }
-
             const card = document.createElement('div');
+            card.className = 'd-flex flex-column gap-4';
             
-            const isReverse = cat === 'fotografia' && index % 2 !== 0;
-
             const imagenesArr = proyecto.imagenes || [];
-            const imagenesHtml = imagenesArr.length > 0 ? 
-              `<div class="bento-gallery ${cat === 'fotografia' ? 'rounded-3 shadow-lg border-0' : ''}">
-                ${imagenesArr.map(url => `<img src="${url}" alt="${proyecto.titulo}" class="img-fluid">`).join('')}
-               </div>` : '';
+            let imagenesHtml = '';
+            
+            if (imagenesArr.length > 0) {
+              const esCarrusel = proyecto.tipoGaleria === 'carrusel';
+              
+              if (esCarrusel) {
+                const carouselId = `carousel-${index}-${cat}`;
+                const hasMultiple = imagenesArr.length > 1;
+                
+                const itemsHtml = imagenesArr.map((url, imgIdx) => `
+                  <div class="carousel-item ${imgIdx === 0 ? 'active' : ''}">
+                    <img src="${url}" alt="${proyecto.titulo}">
+                  </div>
+                `).join('');
+                
+                const indicatorsHtml = hasMultiple ? `
+                  <div class="carousel-indicators">
+                    ${imagenesArr.map((_, imgIdx) => `
+                      <button type="button" data-bs-target="#${carouselId}" data-bs-slide-to="${imgIdx}" class="${imgIdx === 0 ? 'active' : ''}" aria-current="${imgIdx === 0 ? 'true' : 'false'}"></button>
+                    `).join('')}
+                  </div>
+                ` : '';
+                
+                const controlsHtml = hasMultiple ? `
+                  <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                  </button>
+                ` : '';
+                
+                imagenesHtml = `
+                  <div id="${carouselId}" class="carousel slide portfolio-carousel mb-3" data-bs-ride="false">
+                    ${indicatorsHtml}
+                    <div class="carousel-inner">
+                      ${itemsHtml}
+                    </div>
+                    ${controlsHtml}
+                  </div>
+                `;
+              } else {
+                imagenesHtml = `
+                  <div class="simple-gallery">
+                    ${imagenesArr.map(url => `<img src="${url}" alt="${proyecto.titulo}" class="img-fluid rounded" onload="this.classList.add(this.naturalHeight > this.naturalWidth ? 'is-portrait' : 'is-landscape')">`).join('')}
+                  </div>
+                `;
+              }
+            }
 
             let videoHtml = '';
             if (proyecto.videoVimeo) {
               const vimeoMatch = proyecto.videoVimeo.match(/(\d+)/);
               if (vimeoMatch) {
-                videoHtml = `<div class="ratio ratio-16x9"><iframe src="https://player.vimeo.com/video/${vimeoMatch[0]}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>`;
+                const vimeoId = vimeoMatch[0];
+                const containerId = `vimeo-container-${vimeoId}-${index}`;
+                videoHtml = `<div id="${containerId}" class="w-100 mb-3"><div class="text-center py-3"><div class="spinner-border spinner-border-sm text-light" role="status"></div></div></div>`;
+                
+                fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${vimeoId}`)
+                  .then(res => res.json())
+                  .then(videoData => {
+                    const container = document.getElementById(containerId);
+                    if (container) {
+                      const isPortrait = videoData.height > videoData.width;
+                      const percentage = (videoData.height / videoData.width) * 100;
+                      const maxStyles = isPortrait ? 'max-width: 320px; margin: 0 auto;' : '';
+                      
+                      container.innerHTML = `
+                        <div style="${maxStyles}">
+                          <div class="ratio" style="--bs-aspect-ratio: ${percentage}%;">
+                            <iframe src="https://player.vimeo.com/video/${vimeoId}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                          </div>
+                        </div>
+                      `;
+                    }
+                  })
+                  .catch(err => {
+                    console.error('Error fetching Vimeo oEmbed:', err);
+                    const container = document.getElementById(containerId);
+                    if (container) {
+                      container.innerHTML = `
+                        <div class="ratio ratio-16x9">
+                          <iframe src="https://player.vimeo.com/video/${vimeoId}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                      `;
+                    }
+                  });
               }
             }
 
-            if (cat === 'fotografia') {
-              card.className = 'd-flex flex-column gap-4';
-              card.innerHTML = `
-                <div class="${isReverse ? 'text-end' : 'text-start'}">
-                  <h3 class="card-piso-title m-0 text-uppercase">${proyecto.titulo}</h3>
-                </div>
-                ${videoHtml}
-                ${imagenesHtml}
-              `;
-              cardWrapper.appendChild(card);
-            } else {
-              card.className = 'glass-card d-flex flex-column';
-              card.innerHTML = `
-                ${videoHtml}
-                ${imagenesHtml}
-                <div class="p-4 mt-auto">
-                  <h3 class="card-title-custom m-0">${proyecto.titulo}</h3>
-                </div>
-              `;
-              cardWrapper.appendChild(card);
-            }
-            grid.appendChild(cardWrapper);
+            card.innerHTML = `
+              <div class="text-start">
+                <h3 class="card-piso-title m-0 text-uppercase">${proyecto.titulo}</h3>
+              </div>
+              ${imagenesHtml}
+              ${videoHtml}
+            `;
+            grid.appendChild(card);
           });
           section.appendChild(grid);
           containerMaster.appendChild(section);
         }
+
+        // Inicializar vistas previas y eventos de click para carruseles center-mode
+        document.querySelectorAll('.portfolio-carousel').forEach(carouselEl => {
+          const activeItem = carouselEl.querySelector('.carousel-item.active');
+          if (activeItem) {
+            updateCarouselPreviews(carouselEl, activeItem);
+          }
+          
+          carouselEl.addEventListener('slide.bs.carousel', event => {
+            updateCarouselPreviews(carouselEl, event.relatedTarget);
+          });
+          
+          carouselEl.addEventListener('click', event => {
+            const prevItem = event.target.closest('.prev-item');
+            const nextItem = event.target.closest('.next-item');
+            if (prevItem) {
+              const carouselInstance = bootstrap.Carousel.getOrCreateInstance(carouselEl);
+              carouselInstance.prev();
+            } else if (nextItem) {
+              const carouselInstance = bootstrap.Carousel.getOrCreateInstance(carouselEl);
+              carouselInstance.next();
+            }
+          });
+        });
+
+        // Configurar Lightbox de Pantalla Completa
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeBtn = document.getElementById('lightbox-close');
+        
+        function openLightbox(imgSrc, imgAlt) {
+          lightboxImg.src = imgSrc;
+          lightboxImg.alt = imgAlt || '';
+          lightbox.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+          lightbox.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+        
+        // Delegación de eventos para abrir al hacer click en cualquier imagen del contenedor
+        document.getElementById('proyectos-container').addEventListener('click', event => {
+          const img = event.target.closest('img');
+          if (img) {
+            openLightbox(img.src, img.alt);
+          }
+        });
+        
+        // Cerrar al hacer click en la cruz
+        closeBtn.addEventListener('click', closeLightbox);
+        
+        // Cerrar al hacer click fuera de la imagen
+        lightbox.addEventListener('click', event => {
+          if (event.target === lightbox) {
+            closeLightbox();
+          }
+        });
+        
+        // Cerrar con la tecla Escape
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape') {
+            closeLightbox();
+          }
+        });
       })
       .catch(err => console.error('Error trayendo datos:', err));
   </script>
@@ -412,5 +706,11 @@
     }
     draw();
   </script>
+
+  <!-- Lightbox de Pantalla Completa -->
+  <div id="lightbox" class="lightbox-overlay">
+    <button id="lightbox-close" class="lightbox-close-btn">&times;</button>
+    <img id="lightbox-img" class="lightbox-image" src="" alt="Pantalla completa">
+  </div>
 </body>
 </html>
