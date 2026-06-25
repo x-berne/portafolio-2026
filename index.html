@@ -6,7 +6,7 @@
   <title>Mi Portafolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
   
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +26,7 @@
     }
 
     body { 
-      font-family: 'Inter', sans-serif;
+      font-family: 'Satoshi', sans-serif;
       font-weight: 400; /* Regular */
       background-color: var(--bg-dark);
       color: var(--text-main); 
@@ -46,10 +46,21 @@
     }
 
     h1, h2, h3, h4, h5, h6 {
-      font-family: 'Oswald', sans-serif;
+      font-family: 'Clash Display', sans-serif;
       text-transform: uppercase;
-      line-height: 1; /* Interlineado en bloque */
+      line-height: 1;
+    }
+
+    h1 {
       font-weight: 700;
+    }
+
+    h2 {
+      font-weight: 500;
+    }
+
+    h3, h4, h5, h6 {
+      font-weight: 300;
     }
 
     /* Custom Hero styling mixed with Bootstrap */
@@ -59,6 +70,12 @@
       background-position: center bottom; 
       background-repeat: no-repeat;
       position: relative;
+    }
+    
+    @media (max-width: 767px) {
+      .hero {
+        padding-bottom: 75vw; /* Reserves space for the horizontal photo at the bottom */
+      }
     }
     
     .hero::before {
@@ -78,6 +95,7 @@
       .hero {
         background-size: cover; 
         background-position: left center;
+        min-height: 100vh;
       }
       .hero::before {
         background: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0) 70%);
@@ -88,22 +106,22 @@
     }
 
     .hero-title-text {
-      font-size: 3rem;
-      margin-bottom: 16px;
-      color: var(--text-main);
-      text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+      font-size: 2rem;
+      margin-bottom: 24px;
+      color: var(--accent-orange);
+      line-height: 1.1;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     @media (min-width: 768px) {
-      .hero-title-text { font-size: 4rem; }
+      .hero-title-text { font-size: 5rem; }
     }
 
     .hero-greeting-text {
-      font-family: 'Space Mono', monospace;
       font-size: 1.1rem;
       color: var(--accent-orange);
       font-weight: 400;
-      letter-spacing: 2px;
       margin-bottom: 20px;
     }
 
@@ -118,8 +136,8 @@
       display: inline-block;
       background: var(--accent-orange);
       color: #fff;
-      font-family: 'Oswald', sans-serif;
-      font-weight: 700;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
       text-transform: uppercase;
       padding: 16px 32px;
       border-radius: 8px;
@@ -142,9 +160,123 @@
       background: #1da34f;
       color: #1e1e24;
     }
+
+    /* Timeline Experiencia */
+    .timeline-container {
+      position: relative;
+      padding-left: 24px;
+      margin-left: 8px;
+      border-left: 2px solid rgba(255, 255, 255, 0.1);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -31px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--accent-orange);
+      box-shadow: 0 0 10px var(--accent-orange);
+    }
+    .timeline-period {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+    .timeline-role {
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      color: #fff;
+    }
+    .timeline-company {
+      font-size: 1rem;
+      color: var(--accent-yellow);
+      margin-bottom: 12px;
+    }
+    .timeline-desc {
+      font-size: 0.95rem;
+      color: #bbb;
+      line-height: 1.5;
+    }
+
+    @media (min-width: 768px) {
+      .timeline-container {
+        display: flex;
+        overflow-x: auto;
+        padding-left: 0;
+        padding-top: 32px;
+        margin-left: 0;
+        margin-top: 16px;
+        border-left: none;
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        gap: 40px;
+        scrollbar-width: thin;
+      }
+      .timeline-item {
+        flex: 1;
+        min-width: 280px;
+        margin-bottom: 0;
+      }
+      .timeline-dot {
+        left: 0;
+        top: -39px;
+      }
+    }
+    /* Estilos Acordeón Habilidades */
+    .skill-accordion {
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 16px;
+    }
+    .skill-accordion:last-child {
+      border-bottom: none;
+    }
+    .skill-category-header {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .skill-arrow {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      fill: var(--accent-yellow);
+    }
+    .skill-accordion.expanded .skill-arrow {
+      transform: rotate(-180deg);
+    }
+    .skill-tags-wrapper {
+      position: relative;
+      overflow: hidden;
+      max-height: 44px; /* Approx 1 row of badges */
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .skill-accordion.expanded .skill-tags-wrapper {
+      max-height: 1000px;
+    }
+    .skill-fade-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: linear-gradient(to bottom, rgba(30, 30, 36, 0) 0%, rgba(30, 30, 36, 1) 100%);
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .skill-accordion.expanded .skill-fade-overlay {
+      opacity: 0;
+    }
     
     .section-title {
-      font-family: 'Space Mono', monospace;
       font-size: 1.75rem;
       font-weight: 400;
       color: var(--text-main);
@@ -354,10 +486,10 @@
 </head>
 <body>
   <canvas id="starfield"></canvas>
-  <header class="hero min-vh-100 d-flex flex-column justify-content-start justify-content-md-center align-items-start align-items-md-end text-start pt-4 pb-0 py-md-5 px-3 px-md-5" id="hero-header" style="display: none !important;">
+  <header class="hero d-flex flex-column justify-content-start justify-content-md-center align-items-start align-items-md-end text-start px-3 px-md-5 pt-5 pt-md-0 mt-4 mt-md-0" id="hero-header" style="display: none !important;">
     <div class="hero-content w-100">
       <h3 id="hero-greeting" class="hero-greeting-text text-uppercase"></h3>
-      <h1 id="hero-title" class="hero-title-text text-uppercase text-start" style="color: var(--accent-orange);"></h1>
+      <h1 id="hero-title" class="hero-title-text text-uppercase text-start"></h1>
       <p id="hero-bio" class="hero-desc-text mb-4 mb-md-5"></p>
       <div class="d-flex flex-wrap gap-3 justify-content-start">
         <a id="btn-main-cta" href="#" class="btn btn-custom text-decoration-none">Hablemos de tu proyecto</a>
@@ -367,7 +499,11 @@
     </div>
   </header>
 
-  <main class="container py-5 mt-5" id="proyectos-container" style="position: relative; z-index: 2;"></main>
+  <section class="container py-5 mt-4" style="position: relative; z-index: 2;">
+    <div id="perfil-extras" class="w-100" style="display: none;"></div>
+  </section>
+
+  <main class="container py-4" id="proyectos-container" style="position: relative; z-index: 2;"></main>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -395,7 +531,12 @@
     const projectId = "j67rip91";
     const dataset = "production";
     const query = encodeURIComponent(`{
-      "perfil": *[_type == "perfil"][0]{nombre, profesion, "fotoUrl": foto.asset->url, bio, email},
+      "perfil": *[_type == "perfil"][0]{
+        nombre, profesion, "fotoUrl": foto.asset->url, bio, email,
+        habilidades,
+        "herramientas": herramientas[]{ nombre, "iconoUrl": icono.asset->url },
+        experiencia
+      },
       "proyectos": *[_type == "proyecto"]{titulo, categoria, tipoGaleria, "imagenes": imagenes[].asset->url, videoVimeo}
     }`);
     const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
@@ -437,6 +578,77 @@
                 setTimeout(() => { btnEmail.textContent = textOriginal; }, 2000);
               });
             });
+          }
+
+          // Renderizar extras del perfil
+          const extrasContainer = document.getElementById('perfil-extras');
+          let extrasHtml = '';
+
+          // 1. Habilidades
+          if (perfil.habilidades && perfil.habilidades.length > 0) {
+            extrasHtml += '<h2 class="mt-5 mb-4 text-uppercase">HABILIDADES</h2>';
+            extrasHtml += '<div class="d-flex flex-column">';
+            perfil.habilidades.forEach((hab, index) => {
+              extrasHtml += `
+                <div class="skill-accordion pt-2" onclick="this.classList.toggle('expanded')">
+                  <div class="skill-category-header">
+                    <h3 class="mb-0" style="color: var(--accent-yellow); font-size: 1.25rem;">${hab.categoria}</h3>
+                    <svg class="skill-arrow" width="12" height="10" viewBox="0 0 12 10" xmlns="http://www.w3.org/2000/svg">
+                      <polygon points="0,0 12,0 6,10" />
+                    </svg>
+                  </div>
+                  <div class="skill-tags-wrapper mt-3">
+                    <div class="skill-tags-content d-flex flex-wrap gap-2 pb-2">
+                      ${(hab.items || []).map(item => `<span class="badge" style="background-color: rgba(255,255,255,0.1); font-weight: normal; font-size: 0.9rem;">${item}</span>`).join('')}
+                    </div>
+                    <div class="skill-fade-overlay"></div>
+                  </div>
+                </div>
+              `;
+            });
+            extrasHtml += '</div>';
+          }
+          // 2. Herramientas
+          if (perfil.herramientas && perfil.herramientas.length > 0) {
+            extrasHtml += `
+              <div class="mt-5">
+                <h2 class="mb-4 text-uppercase d-flex align-items-center flex-wrap gap-3">
+                  HERRAMIENTAS
+                  <div class="d-flex flex-wrap gap-3 align-items-center" style="margin-top: -2px;">
+                    ${perfil.herramientas.map(herr => herr.iconoUrl ? `<img src="${herr.iconoUrl}" alt="${herr.nombre || 'Herramienta'}" title="${herr.nombre || ''}" data-bs-toggle="tooltip" data-bs-placement="top" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); cursor: pointer; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">` : '').join('')}
+                  </div>
+                </h2>
+              </div>
+            `;
+          }
+
+          // 3. Experiencia
+          if (perfil.experiencia && perfil.experiencia.length > 0) {
+            extrasHtml += `
+              <div class="mt-5">
+                <h2 class="mb-4 text-uppercase d-flex align-items-center flex-wrap gap-3">
+                  EXPERIENCIA
+                </h2>
+                <div class="timeline-container">
+                  ${perfil.experiencia.map(exp => `
+                    <div class="timeline-item">
+                      <div class="timeline-dot"></div>
+                      <div class="timeline-period">${exp.periodo || 'Actualidad'}</div>
+                      <h3 class="timeline-role fs-5">${exp.rol || ''}</h3>
+                      <div class="timeline-company">${exp.empresa || ''}</div>
+                      <div class="timeline-desc">${exp.descripcion ? exp.descripcion.replace(/\n/g, '<br>') : ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          if (extrasHtml !== '') {
+            extrasContainer.innerHTML = extrasHtml;
+            extrasContainer.style.display = 'block';
+            const tooltipTriggerList = extrasContainer.querySelectorAll('[data-bs-toggle="tooltip"]');
+            [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
           }
         }
 
